@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Grinet_DovizTCMB 
+ *
+ * [EN] Get currency rates from the Turkish Central Bank 
+ * [TR] Magento2 için T.C. Merkez Bankası Döviz Kuru Güncelleyici
+ *
+ * https://www.grinet.com.tr/
+ *
+ * Author / Geliştirici : Hidayet Ok / hidonet@gmail.com 
+ * 
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<currency>
+			<grinet_doviz_tcmb>
+				<timeout>30</timeout>
+			</grinet_doviz_tcmb>
+		</currency>
+	</default>
+</config>
