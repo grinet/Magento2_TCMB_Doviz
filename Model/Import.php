@@ -18,7 +18,7 @@ class Import extends \Magento\Directory\Model\Currency\Import\AbstractImport
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://api.fixer.io/latest?base=%1$s&symbols=%2$s';
+    const CURRENCY_CONVERTER_URL = 'https://www.tcmb.gov.tr/kurlar/today.xml';
 
     /**
      * HTTP client
@@ -71,8 +71,39 @@ class Import extends \Magento\Directory\Model\Currency\Import\AbstractImport
                 'GET'
             )->getBody();
 
-            $converted = json_decode($response);
-            $rate = $converted->rates->$currencyTo;
+
+			$doviz_data = json_decode(json_encode(simplexml_load_string($response)),true)['Currency'];
+		
+			$rates = [];
+
+			if (isset($doviz_data) and is_array($doviz_data)) 
+			{
+				
+				foreach ($doviz_data as $curr_key => $curr_data) 
+				{
+					$curr_code = $curr_data["@attributes"]["CurrencyCode"];
+					$curr_rate = floatval($curr_data['BanknoteBuying']);
+					if ($curr_rate > 0) 
+					{
+						$rates[$curr_code] = $curr_rate;
+					} // if sonu
+				} // foreach sonu
+			} // if sonu
+
+			unset($rate);
+
+			if ($currencyFrom != 'TRY' and $currencyTo == 'TRY') 
+			{
+				$rate = $rates[$currencyFrom];
+			} // if sonu
+			elseif ($currencyFrom == 'TRY' and $currencyTo != 'TRY') 
+			{
+				$rate = 1 / $rates[$currencyTo];
+			}
+			elseif ($currencyFrom != 'TRY' and $currencyTo != 'TRY') 
+			{
+				$rate = $rates[$currencyFrom] / $rates[$currencyTo];
+			}
 
             if (!$rate) {
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);
