@@ -2,10 +2,11 @@
     "name": "grinet/doviz-tcmb",
     "license": "MIT",
     "type": "magento2-module",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "keywords": ["magento2", "mage-os", "mageos", "currency"],
     "description": "Get currency rates from the Turkish Central Bank / Magento2 için T.C. Merkez Bankası Döviz Kuru Güncelleyici",
     "require": {
-        "magento/module-directory": "~100.0.5"
+        "magento/module-directory": "~100.0.5 || ^100.1"
     },
     "authors":[
         {

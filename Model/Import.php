@@ -23,7 +23,7 @@ class Import extends \Magento\Directory\Model\Currency\Import\AbstractImport
     /**
      * HTTP client
      *
-     * @var \Magento\Framework\HTTP\ZendClient
+     * @var \Magento\Framework\HTTP\Client\Curl
      */
     protected $_httpClient;
 
@@ -44,7 +44,7 @@ class Import extends \Magento\Directory\Model\Currency\Import\AbstractImport
     ) {
         parent::__construct($currencyFactory);
         $this->_scopeConfig = $scopeConfig;
-        $this->_httpClient = new \Magento\Framework\HTTP\ZendClient();
+        $this->_httpClient = new \Magento\Framework\HTTP\Client\Curl();
     }
 
     /**
@@ -58,18 +58,12 @@ class Import extends \Magento\Directory\Model\Currency\Import\AbstractImport
         $url = sprintf(self::CURRENCY_CONVERTER_URL, $currencyFrom, $currencyTo);
 
         try {
-            $response = $this->_httpClient->setUri(
-                $url
-            )->setConfig(
-                [
-                    'timeout' => $this->_scopeConfig->getValue(
-                        'currency/fixerio/timeout',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    ),
-                ]
-            )->request(
-                'GET'
-            )->getBody();
+            $this->_httpClient->setTimeout($this->_scopeConfig->getValue(
+                'currency/fixerio/timeout',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ));
+            $this->_httpClient->get($url);
+            $response = $this->_httpClient->getBody();
 
 
 			$doviz_data = json_decode(json_encode(simplexml_load_string($response)),true)['Currency'];
@@ -115,7 +109,7 @@ class Import extends \Magento\Directory\Model\Currency\Import\AbstractImport
                 return bcadd($rate, '0', 12);
             }
 
-            return (double)$xml;
+            return (float)$rate;
         } catch (\Exception $e) {
             if ($retry == 0) {
                 $this->_convert($currencyFrom, $currencyTo, 1);

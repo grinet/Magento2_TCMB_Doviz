@@ -22,3 +22,9 @@ Magento2 için Türkiye Cumhuriyet Merkez Bankasından kur güncellemesi yapar.
 ### [Grinet Iyzico - Magento1 Iyzico Sanal Pos Modülü](https://magesanalpos.com/grinet-iyzico-magento-icin-sanal-pos-modulu-magento1)
 ### [Grinet Turkpay - Magento1 Banka Sanal Pos Modülü](https://magesanalpos.com/grinet-turkpay-magento-icin-sanal-pos-modulu)
 ### [Grinet Turkpay Pro - Magento1 Banka Sanal Pos ve Açıktan Tahsilat Modülü](https://magesanalpos.com/grinet-turkpay-magento-icin-sanal-pos-modulu-pro)
+
+## PHP compatibility
+
+PHP 8.5 syntax and PHPCompatibility static checks were run on this release. Existing minimum PHP requirements are retained. Use a Magento release that supports your PHP runtime; syntax/static checks alone do not verify installation, DI compilation or storefront/admin behavior.
+
+This release replaces the deprecated float cast and returns the calculated rate when bcmath is unavailable. The removed ZendClient dependency is replaced with Magento HTTP Client\Curl, available since Magento 2.0. The directory constraint retains ~100.0.5 and adds ^100.1. Mage-OS keywords reflect compatible Composer replacements and Magento namespaces; full store integration has not been tested.
